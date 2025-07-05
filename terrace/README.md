@@ -1,112 +1,112 @@
-Identifying equally scoring trees in phylogenomics with incomplete data using Gentrius
+Gentrius를 사용하여 불완전한 데이터가 있는 계통유전체학에서 동일한 점수를 가진 트리 식별하기
 =======
 
-Gentrius is a deterministic algorithm to generate trees from unrooted incomplete subtrees. It phylogenetics it can be applied to trees inferred with common methods such as supermatrix and supertrees to generate a set of all trees that have the same induced subtrees as an inferred tree. This set is called a stand. Stands are extremely valuable, since under many scoring functions all trees from the same stand have identical analytical score. Read more in our manuscript.
+Gentrius는 뿌리가 없는 불완전한 하위 트리로부터 트리를 생성하는 결정론적 알고리즘입니다. 계통유전체학에서는 슈퍼매트릭스 및 슈퍼트리와 같은 일반적인 방법으로 추론된 트리에 적용하여 추론된 트리와 동일한 유도된 하위 트리를 갖는 모든 트리의 집합을 생성할 수 있습니다. 이 집합을 스탠드(stand)라고 합니다. 스탠드는 많은 점수 산정 함수 하에서 동일한 스탠드의 모든 트리가 동일한 분석 점수를 갖기 때문에 매우 가치가 있습니다. 자세한 내용은 저희 원고를 참조하십시오.
 
-Preprint is available from bioRxiv
-* O. Chernomor, C. Elgert, A. von Haeseler (2023) Identifying equally scoring trees in phylogenomics with incomplete data using Gentrius
+사전 인쇄본은 bioRxiv에서 제공됩니다.
+* O. Chernomor, C. Elgert, A. von Haeseler (2023) Gentrius를 사용하여 불완전한 데이터가 있는 계통유전체학에서 동일한 점수를 가진 트리 식별하기
 
-Analysis with Gentrius
+Gentrius를 이용한 분석
 -----------------------
-### Basic Input
+### 기본 입력
 -----
-There are several ways and inputs one can use to start the analysis. Here are the examples of command lines:
+분석을 시작하는 데 사용할 수 있는 여러 가지 방법과 입력이 있습니다. 다음은 명령줄 예시입니다.
 
-1.  __iqtree2 -gentrius <file 1> -pr_ab_matrix <file 2>__
-2.  __iqtree2 -gentrius <file 1> -s <file 3> -p <file 4>__
-3.  __iqtree2 -gentrius <file 5>__
+1.  __iqtree2 -gentrius <파일 1> -pr_ab_matrix <파일 2>__
+2.  __iqtree2 -gentrius <파일 1> -s <파일 3> -p <파일 4>__
+3.  __iqtree2 -gentrius <파일 5>__
 
-    - File 1: a phylogenetic tree to be analysed
+    - 파일 1: 분석할 계통수
 
-    - File 2: a species per locus presence-absence matrix. First line is a number of species and the number of loci. Other lines contain species name followed by 0's and 1's (with space separator) to indicate presence/absence of gene sequences for corresponding loci. 
+    - 파일 2: 유전자좌당 종 존재-부재 매트릭스. 첫 번째 줄은 종의 수와 유전자좌의 수입니다. 다른 줄에는 해당 유전자좌에 대한 유전자 서열의 존재/부재를 나타내는 종 이름과 0 또는 1(공백 구분자)이 포함됩니다.
 
-            Example: 
+            예시:
             ---------------
-            5 3  
-            species_1 0 1 1  
-            species_2 1 0 1  
-            species_3 1 1 1  
-            species_4 1 1 0  
-            species_5 1 1 1  
+            5 3
+            species_1 0 1 1
+            species_2 1 0 1
+            species_3 1 1 1
+            species_4 1 1 0
+            species_5 1 1 1
 
-    - File 3: an alignment file with concatenated loci
-    - File 4: a partition info file for the alignment in file 3
-    - File 5: contains a set of subtrees to be analysed
+    - 파일 3: 연결된 유전자좌가 있는 정렬 파일
+    - 파일 4: 파일 3의 정렬에 대한 분할 정보 파일
+    - 파일 5: 분석할 하위 트리 집합을 포함합니다.
 
-### Stopping Rules
+### 중지 규칙
 -----
-As the underlying problems are computationally hard, we use three different rules to stop the analysis. The thresholds can be changed by the corresponding options.
+기본 문제는 계산적으로 어렵기 때문에 분석을 중지하기 위해 세 가지 다른 규칙을 사용합니다. 해당 옵션을 사용하여 임계값을 변경할 수 있습니다.
 
-- __Rule 1:__ stop the analysis after generating NUM of trees. Default value: 1MLN trees.   
-         __-g_stop_t NUM__  - To change the threshold  
-         __-g_stop_t 0__  - To turn off the rule  
+- __규칙 1:__ NUM 개의 트리를 생성한 후 분석을 중지합니다. 기본값: 1백만 개 트리.
+         __-g_stop_t NUM__  - 임계값 변경
+         __-g_stop_t 0__  - 규칙 끄기
 
-- __Rule 2:__ stop the analysis after NUM of intermediate trees were visited. Default value: 10MLN trees.       
-         __-g_stop_i NUM__  - To change the threshold  
-         __-g_stop_i 0__  - To turn off the rule  
+- __규칙 2:__ NUM 개의 중간 트리를 방문한 후 분석을 중지합니다. 기본값: 1천만 개 트리.
+         __-g_stop_i NUM__  - 임계값 변경
+         __-g_stop_i 0__  - 규칙 끄기
 
-- __Rule 3:__ stop the analysis after NUM hours (CPU time). Default: 168 hours (7 days).   
-         __-g_stop_h NUM__  - To change the threshold  
-         __-g_stop_h 0__  - To turn off the rule  
+- __규칙 3:__ NUM 시간(CPU 시간) 후에 분석을 중지합니다. 기본값: 168시간(7일).
+         __-g_stop_h NUM__  - 임계값 변경
+         __-g_stop_h 0__  - 규칙 끄기
 
-- To turn off all stopping rules use:  
-         __-g_non_stop__ 
+- 모든 중지 규칙을 끄려면 다음을 사용하십시오.
+         __-g_non_stop__
 
 
-### Output
+### 출력
 -----
-If no other option is used, the ouput is just the log file. The following information is provided about the analysis:
+다른 옵션을 사용하지 않으면 출력은 로그 파일뿐입니다. 분석에 대한 다음 정보가 제공됩니다.
 
-    INFORMATION about input dataset:  
-    Number of taxa: NUM  
-    Number of partitions: NUM  
-    Number of special taxa (row sum = 1): NUM  
-    % of missing entries in pr_ab_matrix: NUM  
-    Number of taxa on initial tree: NUM  
-    Number of taxa to be inserted: NUM  
+    입력 데이터 세트에 대한 정보:
+    분류군 수: NUM
+    분할 수: NUM
+    특수 분류군 수 (행 합계 = 1): NUM
+    pr_ab_matrix에서 누락된 항목 비율: NUM
+    초기 트리의 분류군 수: NUM
+    삽입할 분류군 수: NUM
 
-    SUMMARY:  
-    Number of trees on stand: NUM  
-    Number of intermediated trees visited: NUM  
-    Number of dead ends encountered: NUM  
-
-
-Here are additional options to output more information:
-
-__-g_print__    - Write all generated trees into a file.  
->WARNING: There might be millions of trees! Use the next option to set the limit on the number of trees to be written into a file.  
-
-__-g_print_lim NUM__  - Limit on the number of trees to be written to a file  
->NOTE: The program will continue generation, but will stop writing trees.  
->WARNING: Do not use summary statistics just on a fraction of trees! Due to the way the generation is performed, consecutive trees have more similar topologies. Therefore, the summary statistics for a fraction of generated trees might be misleading.
-
-__-g_print_induced__  - Write induced partition subtrees  
-__-g_print_m__ - Write corresponding presence-absence matrix  
+    요약:
+    스탠드의 트리 수: NUM
+    방문한 중간 트리 수: NUM
+    발생한 막다른 골목 수: NUM
 
 
-### Additional Analyses
+더 많은 정보를 출력하기 위한 추가 옵션은 다음과 같습니다.
+
+__-g_print__    - 생성된 모든 트리를 파일에 씁니다.
+>경고: 수백만 개의 트리가 있을 수 있습니다! 파일에 쓸 트리 수를 제한하려면 다음 옵션을 사용하십시오.
+
+__-g_print_lim NUM__  - 파일에 쓸 트리 수 제한
+>참고: 프로그램은 계속 생성하지만 트리 쓰기를 중지합니다.
+>경고: 트리의 일부에 대해서만 요약 통계를 사용하지 마십시오! 생성 방식 때문에 연속적인 트리는 더 유사한 토폴로지를 갖습니다. 따라서 생성된 트리의 일부에 대한 요약 통계는 오해의 소지가 있을 수 있습니다.
+
+__-g_print_induced__  - 유도된 분할 하위 트리 쓰기
+__-g_print_m__ - 해당 존재-부재 매트릭스 쓰기
+
+
+### 추가 분석
 -----
 
-* __Alternative approach: alternative initial trees__   
-Due to complexity there might be cases, when Gentrius fails to generate any tree in reasonable time. In this case one can try generating trees using alternative approach: remove NUM of leaves, generate trees by re-inserting these removed leaves. This technique cannot guarantee generating all trees from the stand (i.e. trees compatible with a set of subtrees). However, by using this approach on simulated datasets it was possible to generate millions of trees for complex examples providing a lower bound on stand size.
+* __대안적 접근 방식: 대안적 초기 트리__
+복잡성으로 인해 Gentrius가 합리적인 시간 내에 트리를 생성하지 못하는 경우가 있을 수 있습니다. 이 경우 대안적인 접근 방식을 사용하여 트리를 생성해 볼 수 있습니다. NUM 개의 리프를 제거하고 이러한 제거된 리프를 다시 삽입하여 트리를 생성합니다. 이 기술은 스탠드의 모든 트리(즉, 하위 트리 집합과 호환되는 트리)를 생성하는 것을 보장할 수는 없습니다. 그러나 시뮬레이션된 데이터 세트에서 이 접근 방식을 사용하면 복잡한 예에 대해 수백만 개의 트리를 생성하여 스탠드 크기의 하한을 제공할 수 있었습니다.
 
-    __-g_rm_leaves NUM__   - To use alternative approach
+    __-g_rm_leaves NUM__   - 대안적 접근 방식 사용
 
-* __Test set of trees__   
-It is also possible to check, if some trees from a query set have identical set of subtrees as a representative tree (if they belong to the same stand). 
+* __트리 집합 테스트__
+쿼리 집합의 일부 트리가 대표 트리와 동일한 하위 트리 집합을 갖는지(동일한 스탠드에 속하는지) 확인할 수도 있습니다.
 
-    __-g_query FILE__  - To perform check for a set of trees
+    __-g_query FILE__  - 트리 집합에 대한 확인 수행
 
 
-User support
+사용자 지원
 ------------
-If you have further questions, feedback, feature requests, and bug reports, please sign up the following Google group (if not done yet) and post a topic to the 
+추가 질문, 피드백, 기능 요청 및 버그 보고가 있는 경우 다음 Google 그룹에 가입(아직 가입하지 않은 경우)하고 다음 주소로 주제를 게시하십시오.
 
 <https://groups.google.com/d/forum/iqtree>
 
-_The average response time is one working day._
+_평균 응답 시간은 근무일 기준 1일입니다._
 
-Citations
+인용
 ---------
-Preprint is available from bioRxiv
-* O. Chernomor, C. Elgert, A. von Haeseler (2023) Identifying equally scoring trees in phylogenomics with incomplete data using Gentrius
+사전 인쇄본은 bioRxiv에서 제공됩니다.
+* O. Chernomor, C. Elgert, A. von Haeseler (2023) Gentrius를 사용하여 불완전한 데이터가 있는 계통유전체학에서 동일한 점수를 가진 트리 식별하기

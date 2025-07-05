@@ -1,6 +1,4 @@
+MiniZip 1.1은 MiniZip 버전 1.01f에서 파생되었습니다.
 
-MiniZip 1.1 was derrived from MiniZip at version 1.01f
-
-Change in 1.0 (Okt 2009)
- - **TODO - Add history**
-
+1.0 변경 사항 (2009년 10월)
+ - **TODO - 변경 내역 추가**
