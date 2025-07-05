@@ -1,397 +1,173 @@
+ZLIB1.DLL에 대해 자주 묻는 질문
 
-            Frequently Asked Questions about ZLIB1.DLL
 
-
-This document describes the design, the rationale, and the usage
-of the official DLL build of zlib, named ZLIB1.DLL.  If you have
-general questions about zlib, you should see the file "FAQ" found
-in the zlib distribution, or at the following location:
+이 문서는 zlib의 공식 DLL 빌드인 ZLIB1.DLL의 설계, 근거 및 사용법을 설명합니다. zlib에 대한 일반적인 질문이 있는 경우 zlib 배포판에 있는 "FAQ" 파일 또는 다음 위치를 참조하십시오.
   http://www.gzip.org/zlib/zlib_faq.html
 
 
- 1. What is ZLIB1.DLL, and how can I get it?
+ 1. ZLIB1.DLL은 무엇이며 어떻게 구할 수 있습니까?
 
-  - ZLIB1.DLL is the official build of zlib as a DLL.
-    (Please remark the character '1' in the name.)
+  - ZLIB1.DLL은 DLL로서 zlib의 공식 빌드입니다.
+    (이름에 문자 '1'이 있음을 유의하십시오.)
 
-    Pointers to a precompiled ZLIB1.DLL can be found in the zlib
-    web site at:
+    미리 컴파일된 ZLIB1.DLL에 대한 포인터는 다음 zlib 웹 사이트에서 찾을 수 있습니다.
       http://www.zlib.net/
 
-    Applications that link to ZLIB1.DLL can rely on the following
-    specification:
-
-    * The exported symbols are exclusively defined in the source
-      files "zlib.h" and "zlib.def", found in an official zlib
-      source distribution.
-    * The symbols are exported by name, not by ordinal.
-    * The exported names are undecorated.
-    * The calling convention of functions is "C" (CDECL).
-    * The ZLIB1.DLL binary is linked to MSVCRT.DLL.
-
-    The archive in which ZLIB1.DLL is bundled contains compiled
-    test programs that must run with a valid build of ZLIB1.DLL.
-    It is recommended to download the prebuilt DLL from the zlib
-    web site, instead of building it yourself, to avoid potential
-    incompatibilities that could be introduced by your compiler
-    and build settings.  If you do build the DLL yourself, please
-    make sure that it complies with all the above requirements,
-    and it runs with the precompiled test programs, bundled with
-    the original ZLIB1.DLL distribution.
-
-    If, for any reason, you need to build an incompatible DLL,
-    please use a different file name.
-
-
- 2. Why did you change the name of the DLL to ZLIB1.DLL?
-    What happened to the old ZLIB.DLL?
-
-  - The old ZLIB.DLL, built from zlib-1.1.4 or earlier, required
-    compilation settings that were incompatible to those used by
-    a static build.  The DLL settings were supposed to be enabled
-    by defining the macro ZLIB_DLL, before including "zlib.h".
-    Incorrect handling of this macro was silently accepted at
-    build time, resulting in two major problems:
-
-    * ZLIB_DLL was missing from the old makefile.  When building
-      the DLL, not all people added it to the build options.  In
-      consequence, incompatible incarnations of ZLIB.DLL started
-      to circulate around the net.
-
-    * When switching from using the static library to using the
-      DLL, applications had to define the ZLIB_DLL macro and
-      to recompile all the sources that contained calls to zlib
-      functions.  Failure to do so resulted in creating binaries
-      that were unable to run with the official ZLIB.DLL build.
-
-    The only possible solution that we could foresee was to make
-    a binary-incompatible change in the DLL interface, in order to
-    remove the dependency on the ZLIB_DLL macro, and to release
-    the new DLL under a different name.
-
-    We chose the name ZLIB1.DLL, where '1' indicates the major
-    zlib version number.  We hope that we will not have to break
-    the binary compatibility again, at least not as long as the
-    zlib-1.x series will last.
-
-    There is still a ZLIB_DLL macro, that can trigger a more
-    efficient build and use of the DLL, but compatibility no
-    longer dependents on it.
-
-
- 3. Can I build ZLIB.DLL from the new zlib sources, and replace
-    an old ZLIB.DLL, that was built from zlib-1.1.4 or earlier?
-
-  - In principle, you can do it by assigning calling convention
-    keywords to the macros ZEXPORT and ZEXPORTVA.  In practice,
-    it depends on what you mean by "an old ZLIB.DLL", because the
-    old DLL exists in several mutually-incompatible versions.
-    You have to find out first what kind of calling convention is
-    being used in your particular ZLIB.DLL build, and to use the
-    same one in the new build.  If you don't know what this is all
-    about, you might be better off if you would just leave the old
-    DLL intact.
-
-
- 4. Can I compile my application using the new zlib interface, and
-    link it to an old ZLIB.DLL, that was built from zlib-1.1.4 or
-    earlier?
-
-  - The official answer is "no"; the real answer depends again on
-    what kind of ZLIB.DLL you have.  Even if you are lucky, this
-    course of action is unreliable.
-
-    If you rebuild your application and you intend to use a newer
-    version of zlib (post- 1.1.4), it is strongly recommended to
-    link it to the new ZLIB1.DLL.
-
-
- 5. Why are the zlib symbols exported by name, and not by ordinal?
-
-  - Although exporting symbols by ordinal is a little faster, it
-    is risky.  Any single glitch in the maintenance or use of the
-    DEF file that contains the ordinals can result in incompatible
-    builds and frustrating crashes.  Simply put, the benefits of
-    exporting symbols by ordinal do not justify the risks.
-
-    Technically, it should be possible to maintain ordinals in
-    the DEF file, and still export the symbols by name.  Ordinals
-    exist in every DLL, and even if the dynamic linking performed
-    at the DLL startup is searching for names, ordinals serve as
-    hints, for a faster name lookup.  However, if the DEF file
-    contains ordinals, the Microsoft linker automatically builds
-    an implib that will cause the executables linked to it to use
-    those ordinals, and not the names.  It is interesting to
-    notice that the GNU linker for Win32 does not suffer from this
-    problem.
-
-    It is possible to avoid the DEF file if the exported symbols
-    are accompanied by a "__declspec(dllexport)" attribute in the
-    source files.  You can do this in zlib by predefining the
-    ZLIB_DLL macro.
-
-
- 6. I see that the ZLIB1.DLL functions use the "C" (CDECL) calling
-    convention.  Why not use the STDCALL convention?
-    STDCALL is the standard convention in Win32, and I need it in
-    my Visual Basic project!
-
-    (For readability, we use CDECL to refer to the convention
-     triggered by the "__cdecl" keyword, STDCALL to refer to
-     the convention triggered by "__stdcall", and FASTCALL to
-     refer to the convention triggered by "__fastcall".)
-
-  - Most of the native Windows API functions (without varargs) use
-    indeed the WINAPI convention (which translates to STDCALL in
-    Win32), but the standard C functions use CDECL.  If a user
-    application is intrinsically tied to the Windows API (e.g.
-    it calls native Windows API functions such as CreateFile()),
-    sometimes it makes sense to decorate its own functions with
-    WINAPI.  But if ANSI C or POSIX portability is a goal (e.g.
-    it calls standard C functions such as fopen()), it is not a
-    sound decision to request the inclusion of <windows.h>, or to
-    use non-ANSI constructs, for the sole purpose to make the user
-    functions STDCALL-able.
-
-    The functionality offered by zlib is not in the category of
-    "Windows functionality", but is more like "C functionality".
-
-    Technically, STDCALL is not bad; in fact, it is slightly
-    faster than CDECL, and it works with variable-argument
-    functions, just like CDECL.  It is unfortunate that, in spite
-    of using STDCALL in the Windows API, it is not the default
-    convention used by the C compilers that run under Windows.
-    The roots of the problem reside deep inside the unsafety of
-    the K&R-style function prototypes, where the argument types
-    are not specified; but that is another story for another day.
-
-    The remaining fact is that CDECL is the default convention.
-    Even if an explicit convention is hard-coded into the function
-    prototypes inside C headers, problems may appear.  The
-    necessity to expose the convention in users' callbacks is one
-    of these problems.
-
-    The calling convention issues are also important when using
-    zlib in other programming languages.  Some of them, like Ada
-    (GNAT) and Fortran (GNU G77), have C bindings implemented
-    initially on Unix, and relying on the C calling convention.
-    On the other hand, the pre- .NET versions of Microsoft Visual
-    Basic require STDCALL, while Borland Delphi prefers, although
-    it does not require, FASTCALL.
-
-    In fairness to all possible uses of zlib outside the C
-    programming language, we choose the default "C" convention.
-    Anyone interested in different bindings or conventions is
-    encouraged to maintain specialized projects.  The "contrib/"
-    directory from the zlib distribution already holds a couple
-    of foreign bindings, such as Ada, C++, and Delphi.
-
-
- 7. I need a DLL for my Visual Basic project.  What can I do?
-
-  - Define the ZLIB_WINAPI macro before including "zlib.h", when
-    building both the DLL and the user application (except that
-    you don't need to define anything when using the DLL in Visual
-    Basic).  The ZLIB_WINAPI macro will switch on the WINAPI
-    (STDCALL) convention.  The name of this DLL must be different
-    than the official ZLIB1.DLL.
-
-    Gilles Vollant has contributed a build named ZLIBWAPI.DLL,
-    with the ZLIB_WINAPI macro turned on, and with the minizip
-    functionality built in.  For more information, please read
-    the notes inside "contrib/vstudio/readme.txt", found in the
-    zlib distribution.
-
-
- 8. I need to use zlib in my Microsoft .NET project.  What can I
-    do?
-
-  - Henrik Ravn has contributed a .NET wrapper around zlib.  Look
-    into contrib/dotzlib/, inside the zlib distribution.
-
-
- 9. If my application uses ZLIB1.DLL, should I link it to
-    MSVCRT.DLL?  Why?
-
-  - It is not required, but it is recommended to link your
-    application to MSVCRT.DLL, if it uses ZLIB1.DLL.
-
-    The executables (.EXE, .DLL, etc.) that are involved in the
-    same process and are using the C run-time library (i.e. they
-    are calling standard C functions), must link to the same
-    library.  There are several libraries in the Win32 system:
-    CRTDLL.DLL, MSVCRT.DLL, the static C libraries, etc.
-    Since ZLIB1.DLL is linked to MSVCRT.DLL, the executables that
-    depend on it should also be linked to MSVCRT.DLL.
-
-
-10. Why are you saying that ZLIB1.DLL and my application should
-    be linked to the same C run-time (CRT) library?  I linked my
-    application and my DLLs to different C libraries (e.g. my
-    application to a static library, and my DLLs to MSVCRT.DLL),
-    and everything works fine.
-
-  - If a user library invokes only pure Win32 API (accessible via
-    <windows.h> and the related headers), its DLL build will work
-    in any context.  But if this library invokes standard C API,
-    things get more complicated.
-
-    There is a single Win32 library in a Win32 system.  Every
-    function in this library resides in a single DLL module, that
-    is safe to call from anywhere.  On the other hand, there are
-    multiple versions of the C library, and each of them has its
-    own separate internal state.  Standalone executables and user
-    DLLs that call standard C functions must link to a C run-time
-    (CRT) library, be it static or shared (DLL).  Intermixing
-    occurs when an executable (not necessarily standalone) and a
-    DLL are linked to different CRTs, and both are running in the
-    same process.
-
-    Intermixing multiple CRTs is possible, as long as their
-    internal states are kept intact.  The Microsoft Knowledge Base
-    articles KB94248 "HOWTO: Use the C Run-Time" and KB140584
-    "HOWTO: Link with the Correct C Run-Time (CRT) Library"
-    mention the potential problems raised by intermixing.
-
-    If intermixing works for you, it's because your application
-    and DLLs are avoiding the corruption of each of the CRTs'
-    internal states, maybe by careful design, or maybe by fortune.
-
-    Also note that linking ZLIB1.DLL to non-Microsoft CRTs, such
-    as those provided by Borland, raises similar problems.
-
-
-11. Why are you linking ZLIB1.DLL to MSVCRT.DLL?
-
-  - MSVCRT.DLL exists on every Windows 95 with a new service pack
-    installed, or with Microsoft Internet Explorer 4 or later, and
-    on all other Windows 4.x or later (Windows 98, Windows NT 4,
-    or later).  It is freely distributable; if not present in the
-    system, it can be downloaded from Microsoft or from other
-    software provider for free.
-
-    The fact that MSVCRT.DLL does not exist on a virgin Windows 95
-    is not so problematic.  Windows 95 is scarcely found nowadays,
-    Microsoft ended its support a long time ago, and many recent
-    applications from various vendors, including Microsoft, do not
-    even run on it.  Furthermore, no serious user should run
-    Windows 95 without a proper update installed.
-
-
-12. Why are you not linking ZLIB1.DLL to
-    <<my favorite C run-time library>> ?
-
-  - We considered and abandoned the following alternatives:
-
-    * Linking ZLIB1.DLL to a static C library (LIBC.LIB, or
-      LIBCMT.LIB) is not a good option.  People are using the DLL
-      mainly to save disk space.  If you are linking your program
-      to a static C library, you may as well consider linking zlib
-      in statically, too.
-
-    * Linking ZLIB1.DLL to CRTDLL.DLL looks appealing, because
-      CRTDLL.DLL is present on every Win32 installation.
-      Unfortunately, it has a series of problems: it does not
-      work properly with Microsoft's C++ libraries, it does not
-      provide support for 64-bit file offsets, (and so on...),
-      and Microsoft discontinued its support a long time ago.
-
-    * Linking ZLIB1.DLL to MSVCR70.DLL or MSVCR71.DLL, supplied
-      with the Microsoft .NET platform, and Visual C++ 7.0/7.1,
-      raises problems related to the status of ZLIB1.DLL as a
-      system component.  According to the Microsoft Knowledge Base
-      article KB326922 "INFO: Redistribution of the Shared C
-      Runtime Component in Visual C++ .NET", MSVCR70.DLL and
-      MSVCR71.DLL are not supposed to function as system DLLs,
-      because they may clash with MSVCRT.DLL.  Instead, the
-      application's installer is supposed to put these DLLs
-      (if needed) in the application's private directory.
-      If ZLIB1.DLL depends on a non-system runtime, it cannot
-      function as a redistributable system component.
-
-    * Linking ZLIB1.DLL to non-Microsoft runtimes, such as
-      Borland's, or Cygwin's, raises problems related to the
-      reliable presence of these runtimes on Win32 systems.
-      It's easier to let the DLL build of zlib up to the people
-      who distribute these runtimes, and who may proceed as
-      explained in the answer to Question 14.
-
-
-13. If ZLIB1.DLL cannot be linked to MSVCR70.DLL or MSVCR71.DLL,
-    how can I build/use ZLIB1.DLL in Microsoft Visual C++ 7.0
-    (Visual Studio .NET) or newer?
-
-  - Due to the problems explained in the Microsoft Knowledge Base
-    article KB326922 (see the previous answer), the C runtime that
-    comes with the VC7 environment is no longer considered a
-    system component.  That is, it should not be assumed that this
-    runtime exists, or may be installed in a system directory.
-    Since ZLIB1.DLL is supposed to be a system component, it may
-    not depend on a non-system component.
-
-    In order to link ZLIB1.DLL and your application to MSVCRT.DLL
-    in VC7, you need the library of Visual C++ 6.0 or older.  If
-    you don't have this library at hand, it's probably best not to
-    use ZLIB1.DLL.
-
-    We are hoping that, in the future, Microsoft will provide a
-    way to build applications linked to a proper system runtime,
-    from the Visual C++ environment.  Until then, you have a
-    couple of alternatives, such as linking zlib in statically.
-    If your application requires dynamic linking, you may proceed
-    as explained in the answer to Question 14.
-
-
-14. I need to link my own DLL build to a CRT different than
-    MSVCRT.DLL.  What can I do?
-
-  - Feel free to rebuild the DLL from the zlib sources, and link
-    it the way you want.  You should, however, clearly state that
-    your build is unofficial.  You should give it a different file
-    name, and/or install it in a private directory that can be
-    accessed by your application only, and is not visible to the
-    others (i.e. it's neither in the PATH, nor in the SYSTEM or
-    SYSTEM32 directories).  Otherwise, your build may clash with
-    applications that link to the official build.
-
-    For example, in Cygwin, zlib is linked to the Cygwin runtime
-    CYGWIN1.DLL, and it is distributed under the name CYGZ.DLL.
-
-
-15. May I include additional pieces of code that I find useful,
-    link them in ZLIB1.DLL, and export them?
-
-  - No.  A legitimate build of ZLIB1.DLL must not include code
-    that does not originate from the official zlib source code.
-    But you can make your own private DLL build, under a different
-    file name, as suggested in the previous answer.
-
-    For example, zlib is a part of the VCL library, distributed
-    with Borland Delphi and C++ Builder.  The DLL build of VCL
-    is a redistributable file, named VCLxx.DLL.
-
-
-16. May I remove some functionality out of ZLIB1.DLL, by enabling
-    macros like NO_GZCOMPRESS or NO_GZIP at compile time?
-
-  - No.  A legitimate build of ZLIB1.DLL must provide the complete
-    zlib functionality, as implemented in the official zlib source
-    code.  But you can make your own private DLL build, under a
-    different file name, as suggested in the previous answer.
-
-
-17. I made my own ZLIB1.DLL build.  Can I test it for compliance?
-
-  - We prefer that you download the official DLL from the zlib
-    web site.  If you need something peculiar from this DLL, you
-    can send your suggestion to the zlib mailing list.
-
-    However, in case you do rebuild the DLL yourself, you can run
-    it with the test programs found in the DLL distribution.
-    Running these test programs is not a guarantee of compliance,
-    but a failure can imply a detected problem.
+    ZLIB1.DLL에 링크하는 응용 프로그램은 다음 사양을 따를 수 있습니다.
+
+    * 내보낸 기호는 공식 zlib 소스 배포판에 있는 소스 파일 "zlib.h" 및 "zlib.def"에만 정의됩니다.
+    * 기호는 서수가 아닌 이름으로 내보내집니다.
+    * 내보낸 이름은 장식되지 않습니다.
+    * 함수 호출 규칙은 "C"(CDECL)입니다.
+    * ZLIB1.DLL 바이너리는 MSVCRT.DLL에 링크됩니다.
+
+    ZLIB1.DLL이 번들로 제공되는 아카이브에는 유효한 ZLIB1.DLL 빌드로 실행해야 하는 컴파일된 테스트 프로그램이 포함되어 있습니다. 컴파일러 및 빌드 설정으로 인해 발생할 수 있는 잠재적인 비호환성을 피하기 위해 직접 빌드하는 대신 zlib 웹 사이트에서 미리 빌드된 DLL을 다운로드하는 것이 좋습니다. 직접 DLL을 빌드하는 경우 위의 모든 요구 사항을 준수하고 원본 ZLIB1.DLL 배포판과 함께 번들로 제공되는 미리 컴파일된 테스트 프로그램으로 실행되는지 확인하십시오.
+
+    어떤 이유로든 호환되지 않는 DLL을 빌드해야 하는 경우 다른 파일 이름을 사용하십시오.
+
+
+ 2. DLL 이름을 ZLIB1.DLL로 변경한 이유는 무엇입니까?
+    이전 ZLIB.DLL은 어떻게 되었습니까?
+
+  - zlib-1.1.4 이하에서 빌드된 이전 ZLIB.DLL은 정적 빌드에 사용된 것과 호환되지 않는 컴파일 설정이 필요했습니다. DLL 설정은 "zlib.h"를 포함하기 전에 매크로 ZLIB_DLL을 정의하여 활성화해야 했습니다. 이 매크로를 잘못 처리하면 빌드 시 자동으로 수락되어 두 가지 주요 문제가 발생했습니다.
+
+    * 이전 makefile에 ZLIB_DLL이 누락되었습니다. DLL을 빌드할 때 모든 사람이 빌드 옵션에 이를 추가하지는 않았습니다. 결과적으로 호환되지 않는 ZLIB.DLL의 화신이 인터넷에 유포되기 시작했습니다.
+
+    * 정적 라이브러리 사용에서 DLL 사용으로 전환할 때 응용 프로그램은 ZLIB_DLL 매크로를 정의하고 zlib 함수 호출을 포함하는 모든 소스를 다시 컴파일해야 했습니다. 그렇게 하지 않으면 공식 ZLIB.DLL 빌드로 실행할 수 없는 바이너리가 생성되었습니다.
+
+    저희가 예측할 수 있었던 유일한 해결책은 ZLIB_DLL 매cro에 대한 종속성을 제거하고 새 DLL을 다른 이름으로 릴리스하기 위해 DLL 인터페이스에서 바이너리 비호환 변경을 수행하는 것이었습니다.
+
+    저희는 주 zlib 버전 번호를 나타내는 '1'이 있는 ZLIB1.DLL이라는 이름을 선택했습니다. 적어도 zlib-1.x 시리즈가 지속되는 한 바이너리 호환성을 다시 깨뜨리지 않기를 바랍니다.
+
+    DLL의 보다 효율적인 빌드 및 사용을 트리거할 수 있는 ZLIB_DLL 매크로가 여전히 있지만 호환성은 더 이상 이에 의존하지 않습니다.
+
+
+ 3. 새 zlib 소스에서 ZLIB.DLL을 빌드하고 zlib-1.1.4 이하에서 빌드된 이전 ZLIB.DLL을 바꿀 수 있습니까?
+
+  - 원칙적으로 매크로 ZEXPORT 및 ZEXPORTVA에 호출 규칙 키워드를 할당하여 수행할 수 있습니다. 실제로 이는 "이전 ZLIB.DLL"이 무엇을 의미하는지에 따라 달라집니다. 이전 DLL은 여러 상호 호환되지 않는 버전으로 존재하기 때문입니다. 먼저 특정 ZLIB.DLL 빌드에서 어떤 종류의 호출 규칙이 사용되는지 확인하고 새 빌드에서 동일한 규칙을 사용해야 합니다. 이것이 무엇에 관한 것인지 모르는 경우 이전 DLL을 그대로 두는 것이 좋습니다.
+
+
+ 4. 새 zlib 인터페이스를 사용하여 응용 프로그램을 컴파일하고 zlib-1.1.4 이하에서 빌드된 이전 ZLIB.DLL에 링크할 수 있습니까?
+
+  - 공식적인 답변은 "아니요"입니다. 실제 답변은 다시 어떤 종류의 ZLIB.DLL을 가지고 있는지에 따라 달라집니다. 운이 좋더라도 이 조치는 신뢰할 수 없습니다.
+
+    응용 프로그램을 다시 빌드하고 최신 버전의 zlib(1.1.4 이후)를 사용하려는 경우 새 ZLIB1.DLL에 링크하는 것이 좋습니다.
+
+
+ 5. zlib 기호가 서수가 아닌 이름으로 내보내지는 이유는 무엇입니까?
+
+  - 서수로 기호를 내보내는 것이 약간 빠르지만 위험합니다. 서수를 포함하는 DEF 파일의 유지 관리 또는 사용에 단 하나의 결함이라도 있으면 호환되지 않는 빌드와 실망스러운 충돌이 발생할 수 있습니다. 간단히 말해 서수로 기호를 내보내는 이점은 위험을 정당화하지 못합니다.
+
+    기술적으로 DEF 파일에서 서수를 유지 관리하고 여전히 이름으로 기호를 내보내는 것이 가능해야 합니다. 서수는 모든 DLL에 존재하며 DLL 시작 시 수행되는 동적 링크가 이름을 검색하더라도 서수는 더 빠른 이름 조회를 위한 힌트 역할을 합니다. 그러나 DEF 파일에 서수가 포함되어 있으면 Microsoft 링커는 자동으로 실행 파일이 해당 서수를 사용하고 이름을 사용하지 않도록 하는 implib를 빌드합니다. Win32용 GNU 링커는 이 문제로 어려움을 겪지 않는다는 점이 흥미롭습니다.
+
+    내보낸 기호에 소스 파일에 "__declspec(dllexport)" 특성이 있는 경우 DEF 파일을 피할 수 있습니다. ZLIB_DLL 매크로를 미리 정의하여 zlib에서 이 작업을 수행할 수 있습니다.
+
+
+ 6. ZLIB1.DLL 함수가 "C"(CDECL) 호출 규칙을 사용하는 것을 확인했습니다. STDCALL 규칙을 사용하지 않는 이유는 무엇입니까?
+    STDCALL은 Win32의 표준 규칙이며 Visual Basic 프로젝트에 필요합니다!
+
+    (가독성을 위해 "__cdecl" 키워드로 트리거되는 규칙을 CDECL, "__stdcall" 키워드로 트리거되는 규칙을 STDCALL, "__fastcall" 키워드로 트리거되는 규칙을 FASTCALL이라고 합니다.)
+
+  - 대부분의 기본 Windows API 함수(varargs 없음)는 실제로 WINAPI 규칙(Win32에서 STDCALL로 변환됨)을 사용하지만 표준 C 함수는 CDECL을 사용합니다. 사용자 응용 프로그램이 Windows API에 본질적으로 연결되어 있는 경우(예: CreateFile()과 같은 기본 Windows API 함수 호출) 자체 함수를 WINAPI로 장식하는 것이 합리적일 수 있습니다. 그러나 ANSI C 또는 POSIX 이식성이 목표인 경우(예: fopen()과 같은 표준 C 함수 호출) 사용자 함수를 STDCALL 가능하게 만들기 위해 <windows.h>를 포함하거나 비 ANSI 구문을 사용하는 것은 건전한 결정이 아닙니다.
+
+    zlib에서 제공하는 기능은 "Windows 기능" 범주에 속하지 않고 "C 기능"에 더 가깝습니다.
+
+    기술적으로 STDCALL은 나쁘지 않습니다. 실제로 CDECL보다 약간 빠르며 CDECL과 마찬가지로 가변 인수 함수와 함께 작동합니다. Windows API에서 STDCALL을 사용함에도 불구하고 Windows에서 실행되는 C 컴파일러에서 사용하는 기본 규칙이 아니라는 점이 아쉽습니다. 문제의 근원은 인수 유형이 지정되지 않은 K&R 스타일 함수 프로토타입의 불안전성에 깊이 자리 잡고 있지만, 그것은 다른 날의 다른 이야기입니다.
+
+    남은 사실은 CDECL이 기본 규칙이라는 것입니다. C 헤더 내부의 함수 프로토타입에 명시적인 규칙이 하드 코딩되어 있더라도 문제가 발생할 수 있습니다. 사용자 콜백에 규칙을 노출해야 하는 필요성이 이러한 문제 중 하나입니다.
+
+    호출 규칙 문제는 다른 프로그래밍 언어에서 zlib를 사용할 때도 중요합니다. Ada(GNAT) 및 Fortran(GNU G77)과 같은 일부 언어는 처음에 Unix에서 구현되었으며 C 호출 규칙에 의존하는 C 바인딩을 가지고 있습니다. 반면에 Microsoft Visual Basic의 .NET 이전 버전에는 STDCALL이 필요하며 Borland Delphi는 FASTCALL을 선호하지만 필수는 아닙니다.
+
+    C 프로그래밍 언어 외부에서 zlib를 사용할 수 있는 모든 가능성에 공평하게 하기 위해 기본 "C" 규칙을 선택합니다. 다른 바인딩이나 규칙에 관심이 있는 사람은 누구나 전문화된 프로젝트를 유지 관리하는 것이 좋습니다. zlib 배포판의 "contrib/" 디렉토리에는 이미 Ada, C++ 및 Delphi와 같은 몇 가지 외부 바인딩이 있습니다.
+
+
+ 7. Visual Basic 프로젝트에 DLL이 필요합니다. 어떻게 해야 합니까?
+
+  - DLL과 사용자 응용 프로그램을 모두 빌드할 때 "zlib.h"를 포함하기 전에 ZLIB_WINAPI 매크로를 정의하십시오(Visual Basic에서 DLL을 사용할 때는 아무것도 정의할 필요 없음). ZLIB_WINAPI 매크로는 WINAPI(STDCALL) 규칙을 켭니다. 이 DLL의 이름은 공식 ZLIB1.DLL과 달라야 합니다.
+
+    Gilles Vollant는 ZLIB_WINAPI 매크로가 켜져 있고 minizip 기능이 내장된 ZLIBWAPI.DLL이라는 빌드를 기여했습니다. 자세한 내용은 zlib 배포판에 있는 "contrib/vstudio/readme.txt" 내부의 참고 사항을 읽어보십시오.
+
+
+ 8. Microsoft .NET 프로젝트에서 zlib를 사용해야 합니다. 어떻게 해야 합니까?
+
+  - Henrik Ravn이 zlib 주변에 .NET 래퍼를 기여했습니다. zlib 배포판 내부의 contrib/dotzlib/를 살펴보십시오.
+
+
+ 9. 응용 프로그램에서 ZLIB1.DLL을 사용하는 경우 MSVCRT.DLL에 링크해야 합니까? 왜 그렇습니까?
+
+  - 필수는 아니지만 응용 프로그램에서 ZLIB1.DLL을 사용하는 경우 MSVCRT.DLL에 링크하는 것이 좋습니다.
+
+    동일한 프로세스에 관련되어 있고 C 런타임 라이브러리를 사용하는(즉, 표준 C 함수를 호출하는) 실행 파일(.EXE, .DLL 등)은 동일한 라이브러리에 링크해야 합니다. Win32 시스템에는 CRTDLL.DLL, MSVCRT.DLL, 정적 C 라이브러리 등 여러 라이브러리가 있습니다. ZLIB1.DLL은 MSVCRT.DLL에 링크되므로 이에 의존하는 실행 파일도 MSVCRT.DLL에 링크해야 합니다.
+
+
+10. ZLIB1.DLL과 응용 프로그램이 동일한 C 런타임(CRT) 라이브러리에 링크되어야 한다고 말하는 이유는 무엇입니까? 응용 프로그램과 DLL을 다른 C 라이브러리(예: 응용 프로그램은 정적 라이브러리에, DLL은 MSVCRT.DLL에)에 링크했는데 모든 것이 잘 작동합니다.
+
+  - 사용자 라이브러리가 순수 Win32 API(<windows.h> 및 관련 헤더를 통해 액세스 가능)만 호출하는 경우 해당 DLL 빌드는 모든 컨텍스트에서 작동합니다. 그러나 이 라이브러리가 표준 C API를 호출하면 상황이 더 복잡해집니다.
+
+    Win32 시스템에는 단일 Win32 라이브러리가 있습니다. 이 라이브러리의 모든 함수는 어디서나 안전하게 호출할 수 있는 단일 DLL 모듈에 있습니다. 반면에 C 라이브러리에는 여러 버전이 있으며 각 버전에는 자체 내부 상태가 있습니다. 표준 C 함수를 호출하는 독립 실행형 실행 파일 및 사용자 DLL은 정적이든 공유(DLL)이든 C 런타임(CRT) 라이브러리에 링크해야 합니다. 실행 파일(반드시 독립 실행형일 필요는 없음)과 DLL이 다른 CRT에 링크되고 둘 다 동일한 프로세스에서 실행될 때 혼합이 발생합니다.
+
+    여러 CRT를 혼합하는 것은 내부 상태가 손상되지 않는 한 가능합니다. Microsoft 기술 자료 문서 KB94248 "HOWTO: C 런타임 사용" 및 KB140584 "HOWTO: 올바른 C 런타임(CRT) 라이브러리와 링크"에는 혼합으로 인해 발생하는 잠재적인 문제가 언급되어 있습니다.
+
+    혼합이 효과가 있다면 응용 프로그램과 DLL이 신중한 설계 또는 운에 의해 각 CRT의 내부 상태 손상을 피하고 있기 때문입니다.
+
+    또한 ZLIB1.DLL을 Borland에서 제공하는 것과 같은 비 Microsoft CRT에 링크하면 유사한 문제가 발생합니다.
+
+
+11. ZLIB1.DLL을 MSVCRT.DLL에 링크하는 이유는 무엇입니까?
+
+  - MSVCRT.DLL은 새 서비스 팩이 설치된 모든 Windows 95 또는 Microsoft Internet Explorer 4 이상이 설치된 모든 Windows 95 및 기타 모든 Windows 4.x 이상(Windows 98, Windows NT 4 이상)에 존재합니다. 무료로 배포할 수 있으며 시스템에 없는 경우 Microsoft 또는 다른 소프트웨어 공급업체에서 무료로 다운로드할 수 있습니다.
+
+    MSVCRT.DLL이 순정 Windows 95에 존재하지 않는다는 사실은 그다지 문제가 되지 않습니다. Windows 95는 요즘 거의 찾아볼 수 없으며 Microsoft는 오래 전에 지원을 종료했으며 Microsoft를 포함한 다양한 공급업체의 많은 최신 응용 프로그램은 Windows 95에서 실행되지도 않습니다. 또한 심각한 사용자는 적절한 업데이트가 설치되지 않은 Windows 95를 실행해서는 안 됩니다.
+
+
+12. ZLIB1.DLL을 <<내가 가장 좋아하는 C 런타임 라이브러리>>에 링크하지 않는 이유는 무엇입니까?
+
+  - 저희는 다음 대안을 고려하고 포기했습니다.
+
+    * ZLIB1.DLL을 정적 C 라이브러리(LIBC.LIB 또는 LIBCMT.LIB)에 링크하는 것은 좋은 옵션이 아닙니다. 사람들은 주로 디스크 공간을 절약하기 위해 DLL을 사용합니다. 프로그램을 정적 C 라이브러리에 링크하는 경우 zlib도 정적으로 링크하는 것을 고려할 수 있습니다.
+
+    * ZLIB1.DLL을 CRTDLL.DLL에 링크하는 것은 매력적으로 보입니다. CRTDLL.DLL은 모든 Win32 설치에 존재하기 때문입니다. 안타깝게도 Microsoft의 C++ 라이브러리와 제대로 작동하지 않고 64비트 파일 오프셋을 지원하지 않는 등 일련의 문제가 있으며 Microsoft는 오래 전에 지원을 중단했습니다.
+
+    * Microsoft .NET 플랫폼과 함께 제공되는 MSVCR70.DLL 또는 MSVCR71.DLL 및 Visual C++ 7.0/7.1에 ZLIB1.DLL을 링크하면 ZLIB1.DLL의 시스템 구성 요소로서의 상태와 관련된 문제가 발생합니다. Microsoft 기술 자료 문서 KB326922 "정보: Visual C++ .NET의 공유 C 런타임 구성 요소 재배포"에 따르면 MSVCR70.DLL 및 MSVCR71.DLL은 MSVCRT.DLL과 충돌할 수 있으므로 시스템 DLL로 작동하도록 되어 있지 않습니다. 대신 응용 프로그램 설치 프로그램은 이러한 DLL(필요한 경우)을 응용 프로그램의 개인 디렉토리에 넣어야 합니다. ZLIB1.DLL이 비시스템 런타임에 의존하는 경우 재배포 가능한 시스템 구성 요소로 작동할 수 없습니다.
+
+    * Borland 또는 Cygwin과 같은 비 Microsoft 런타임에 ZLIB1.DLL을 링크하면 Win32 시스템에서 이러한 런타임의 안정적인 존재와 관련된 문제가 발생합니다. 이러한 런타임을 배포하고 질문 14의 답변에 설명된 대로 진행할 수 있는 사람들에게 zlib의 DLL 빌드를 맡기는 것이 더 쉽습니다.
+
+
+13. ZLIB1.DLL을 MSVCR70.DLL 또는 MSVCR71.DLL에 링크할 수 없는 경우 Microsoft Visual C++ 7.0(Visual Studio .NET) 이상에서 ZLIB1.DLL을 어떻게 빌드/사용할 수 있습니까?
+
+  - Microsoft 기술 자료 문서 KB326922(이전 답변 참조)에 설명된 문제로 인해 VC7 환경과 함께 제공되는 C 런타임은 더 이상 시스템 구성 요소로 간주되지 않습니다. 즉, 이 런타임이 존재하거나 시스템 디렉토리에 설치될 수 있다고 가정해서는 안 됩니다. ZLIB1.DLL은 시스템 구성 요소여야 하므로 비시스템 구성 요소에 의존해서는 안 됩니다.
+
+    VC7에서 ZLIB1.DLL과 응용 프로그램을 MSVCRT.DLL에 링크하려면 Visual C++ 6.0 이하의 라이브러리가 필요합니다. 이 라이브러리가 없는 경우 ZLIB1.DLL을 사용하지 않는 것이 가장 좋습니다.
+
+    향후 Microsoft가 Visual C++ 환경에서 적절한 시스템 런타임에 링크된 응용 프로그램을 빌드하는 방법을 제공하기를 바랍니다. 그때까지는 zlib를 정적으로 링크하는 등 몇 가지 대안이 있습니다. 응용 프로그램에 동적 링크가 필요한 경우 질문 14의 답변에 설명된 대로 진행할 수 있습니다.
+
+
+14. 자체 DLL 빌드를 MSVCRT.DLL과 다른 CRT에 링크해야 합니다. 어떻게 해야 합니까?
+
+  - zlib 소스에서 DLL을 자유롭게 다시 빌드하고 원하는 대로 링크하십시오. 그러나 빌드가 비공식적임을 명확히 명시해야 합니다. 다른 파일 이름을 지정하거나 응용 프로그램에서만 액세스할 수 있고 다른 사람에게는 보이지 않는 개인 디렉토리(즉, PATH 또는 SYSTEM 또는 SYSTEM32 디렉토리에 없음)에 설치해야 합니다. 그렇지 않으면 빌드가 공식 빌드에 링크하는 응용 프로그램과 충돌할 수 있습니다.
+
+    예를 들어 Cygwin에서 zlib는 Cygwin 런타임 CYGWIN1.DLL에 링크되며 CYGZ.DLL이라는 이름으로 배포됩니다.
+
+
+15. 유용하다고 생각되는 추가 코드 조각을 포함하고 ZLIB1.DLL에 링크하고 내보낼 수 있습니까?
+
+  - 아니요. ZLIB1.DLL의 합법적인 빌드에는 공식 zlib 소스 코드에서 비롯되지 않은 코드가 포함되어서는 안 됩니다. 그러나 이전 답변에서 제안한 대로 다른 파일 이름으로 자체 개인 DLL 빌드를 만들 수 있습니다.
+
+    예를 들어 zlib는 Borland Delphi 및 C++ Builder와 함께 배포되는 VCL 라이브러리의 일부입니다. VCL의 DLL 빌드는 VCLxx.DLL이라는 재배포 가능한 파일입니다.
+
+
+16. 컴파일 시 NO_GZCOMPRESS 또는 NO_GZIP과 같은 매크로를 활성화하여 ZLIB1.DLL에서 일부 기능을 제거할 수 있습니까?
+
+  - 아니요. ZLIB1.DLL의 합법적인 빌드는 공식 zlib 소스 코드에 구현된 완전한 zlib 기능을 제공해야 합니다. 그러나 이전 답변에서 제안한 대로 다른 파일 이름으로 자체 개인 DLL 빌드를 만들 수 있습니다.
+
+
+17. 자체 ZLIB1.DLL 빌드를 만들었습니다. 규정 준수 여부를 테스트할 수 있습니까?
+
+  - zlib 웹 사이트에서 공식 DLL을 다운로드하는 것이 좋습니다. 이 DLL에서 특이한 것이 필요한 경우 zlib 메일링 리스트에 제안을 보낼 수 있습니다.
+
+    그러나 직접 DLL을 다시 빌드하는 경우 DLL 배포판에 있는 테스트 프로그램으로 실행할 수 있습니다. 이러한 테스트 프로그램을 실행하는 것은 규정 준수를 보장하지는 않지만 실패는 감지된 문제를 의미할 수 있습니다.
 
 **
 
-This document is written and maintained by
+이 문서는 다음 사람이 작성하고 유지 관리합니다.
 Cosmin Truta <cosmint@cs.ubbcluj.ro>

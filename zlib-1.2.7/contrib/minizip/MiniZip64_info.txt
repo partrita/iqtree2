@@ -1,74 +1,63 @@
-MiniZip - Copyright (c) 1998-2010 - by Gilles Vollant - version 1.1 64 bits from Mathias Svensson
+MiniZip - 저작권 (c) 1998-2010 - Gilles Vollant - Mathias Svensson의 버전 1.1 64비트
 
-Introduction
+소개
 ---------------------
-MiniZip 1.1 is built from MiniZip 1.0 by Gilles Vollant ( http://www.winimage.com/zLibDll/minizip.html )
+MiniZip 1.1은 Gilles Vollant의 MiniZip 1.0 ( http://www.winimage.com/zLibDll/minizip.html )을 기반으로 빌드되었습니다.
 
-When adding ZIP64 support into minizip it would result into risk of breaking compatibility with minizip 1.0.
-All possible work was done for compatibility.
+minizip에 ZIP64 지원을 추가하면 minizip 1.0과의 호환성이 깨질 위험이 있습니다.
+호환성을 위해 가능한 모든 작업이 수행되었습니다.
 
 
-Background
+배경
 ---------------------
-When adding ZIP64 support Mathias Svensson found that Even Rouault have added ZIP64 
-support for unzip.c into minizip for a open source project called gdal ( http://www.gdal.org/ )
+ZIP64 지원을 추가할 때 Mathias Svensson은 Even Rouault가 gdal ( http://www.gdal.org/ )이라는 오픈 소스 프로젝트를 위해 minizip의 unzip.c에 ZIP64 지원을 추가했다는 것을 발견했습니다.
 
-That was used as a starting point. And after that ZIP64 support was added to zip.c
-some refactoring and code cleanup was also done.
+이것이 시작점이 되었고, 그 후 zip.c에 ZIP64 지원이 추가되었으며 일부 리팩토링 및 코드 정리도 수행되었습니다.
 
 
-Changed from MiniZip 1.0 to MiniZip 1.1
+MiniZip 1.0에서 MiniZip 1.1로 변경된 사항
 ---------------------------------------
-* Added ZIP64 support for unzip ( by Even Rouault )
-* Added ZIP64 support for zip ( by Mathias Svensson )
-* Reverted some changed that Even Rouault did.
-* Bunch of patches received from Gulles Vollant that he received for MiniZip from various users.
-* Added unzip patch for BZIP Compression method (patch create by Daniel Borca)
-* Added BZIP Compress method for zip
-* Did some refactoring and code cleanup
+* unzip에 대한 ZIP64 지원 추가 (Even Rouault 제공)
+* zip에 대한 ZIP64 지원 추가 (Mathias Svensson 제공)
+* Even Rouault가 변경한 일부 사항 되돌림
+* Gulles Vollant가 다양한 사용자로부터 MiniZip에 대해 받은 패치 모음
+* BZIP 압축 방식에 대한 unzip 패치 추가 (Daniel Borca가 만든 패치)
+* zip에 대한 BZIP 압축 방식 추가
+* 일부 리팩토링 및 코드 정리 수행
 
 
-Credits
+크레딧
 
- Gilles Vollant    - Original MiniZip author
- Even Rouault      - ZIP64 unzip Support
- Daniel Borca      - BZip Compression method support in unzip
- Mathias Svensson  - ZIP64 zip support
- Mathias Svensson  - BZip Compression method support in zip
+ Gilles Vollant    - 원본 MiniZip 작성자
+ Even Rouault      - ZIP64 unzip 지원
+ Daniel Borca      - unzip의 BZip 압축 방식 지원
+ Mathias Svensson  - ZIP64 zip 지원
+ Mathias Svensson  - zip의 BZip 압축 방식 지원
 
- Resources
+ 리소스
 
  ZipLayout   http://result42.com/projects/ZipFileLayout
-             Command line tool for Windows that shows the layout and information of the headers in a zip archive.
-             Used when debugging and validating the creation of zip files using MiniZip64
+             zip 아카이브의 헤더 레이아웃 및 정보를 보여주는 Windows용 명령줄 도구입니다.
+             MiniZip64를 사용하여 zip 파일 생성을 디버깅하고 검증할 때 사용됩니다.
 
 
  ZIP App Note  http://www.pkware.com/documents/casestudies/APPNOTE.TXT
-               Zip File specification
+               Zip 파일 사양
 
 
-Notes.
- * To be able to use BZip compression method in zip64.c or unzip64.c the BZIP2 lib is needed and HAVE_BZIP2 need to be defined.
+참고.
+ * zip64.c 또는 unzip64.c에서 BZip 압축 방식을 사용하려면 BZIP2 라이브러리가 필요하며 HAVE_BZIP2가 정의되어야 합니다.
 
-License
+라이선스
 ----------------------------------------------------------
-   Condition of use and distribution are the same than zlib :
+   사용 및 배포 조건은 zlib와 동일합니다.
 
-  This software is provided 'as-is', without any express or implied
-  warranty.  In no event will the authors be held liable for any damages
-  arising from the use of this software.
+  이 소프트웨어는 어떠한 명시적 또는 묵시적 보증 없이 '있는 그대로' 제공됩니다. 어떠한 경우에도 저자는 이 소프트웨어의 사용으로 인해 발생하는 모든 손해에 대해 책임을 지지 않습니다.
 
-  Permission is granted to anyone to use this software for any purpose,
-  including commercial applications, and to alter it and redistribute it
-  freely, subject to the following restrictions:
+  상업적 응용 프로그램을 포함하여 모든 목적으로 이 소프트웨어를 사용하고 다음 제한 사항에 따라 자유롭게 변경하고 재배포할 수 있는 권한이 모든 사람에게 부여됩니다.
 
-  1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
-  2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
-  3. This notice may not be removed or altered from any source distribution.
+  1. 이 소프트웨어의 출처를 허위로 표시해서는 안 됩니다. 원본 소프트웨어를 작성했다고 주장해서는 안 됩니다. 제품에 이 소프트웨어를 사용하는 경우 제품 설명서에 감사의 말을 표시하는 것은 좋지만 필수는 아닙니다.
+  2. 변경된 소스 버전은 명확하게 표시해야 하며 원본 소프트웨어로 허위 표시해서는 안 됩니다.
+  3. 이 고지는 모든 소스 배포에서 제거하거나 변경할 수 없습니다.
 
 ----------------------------------------------------------
-

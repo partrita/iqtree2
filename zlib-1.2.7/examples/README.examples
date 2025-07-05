@@ -1,49 +1,44 @@
-This directory contains examples of the use of zlib and other relevant
-programs and documentation.
+이 디렉토리에는 zlib 사용 예제 및 기타 관련 프로그램과 문서가 포함되어 있습니다.
 
 enough.c
-    calculation and justification of ENOUGH parameter in inftrees.h
-    - calculates the maximum table space used in inflate tree
-      construction over all possible Huffman codes
+    inftrees.h의 ENOUGH 매개변수 계산 및 근거
+    - 가능한 모든 허프만 코드에 대해 inflate 트리 구성에 사용되는 최대 테이블 공간 계산
 
 fitblk.c
-    compress just enough input to nearly fill a requested output size
-    - zlib isn't designed to do this, but fitblk does it anyway
+    요청된 출력 크기를 거의 채울 만큼만 입력 압축
+    - zlib는 이를 위해 설계되지 않았지만 fitblk는 어쨌든 수행합니다.
 
 gun.c
-    uncompress a gzip file
-    - illustrates the use of inflateBack() for high speed file-to-file
-      decompression using call-back functions
-    - is approximately twice as fast as gzip -d
-    - also provides Unix uncompress functionality, again twice as fast
+    gzip 파일 압축 해제
+    - 콜백 함수를 사용하여 고속 파일 대 파일 압축 해제를 위한 inflateBack() 사용 설명
+    - gzip -d보다 약 2배 빠름
+    - 또한 Unix uncompress 기능을 제공하며, 다시 약 2배 빠름
 
 gzappend.c
-    append to a gzip file
-    - illustrates the use of the Z_BLOCK flush parameter for inflate()
-    - illustrates the use of deflatePrime() to start at any bit
+    gzip 파일에 추가
+    - inflate()에 대한 Z_BLOCK 플러시 매개변수 사용 설명
+    - 모든 비트에서 시작하기 위한 deflatePrime() 사용 설명
 
 gzjoin.c
-    join gzip files without recalculating the crc or recompressing
-    - illustrates the use of the Z_BLOCK flush parameter for inflate()
-    - illustrates the use of crc32_combine()
+    crc를 다시 계산하거나 다시 압축하지 않고 gzip 파일 결합
+    - inflate()에 대한 Z_BLOCK 플러시 매개변수 사용 설명
+    - crc32_combine() 사용 설명
 
 gzlog.c
 gzlog.h
-    efficiently and robustly maintain a message log file in gzip format
-    - illustrates use of raw deflate, Z_PARTIAL_FLUSH, deflatePrime(),
-      and deflateSetDictionary()
-    - illustrates use of a gzip header extra field
+    gzip 형식으로 메시지 로그 파일을 효율적이고 강력하게 유지 관리
+    - 원시 deflate, Z_PARTIAL_FLUSH, deflatePrime() 및 deflateSetDictionary() 사용 설명
+    - gzip 헤더 추가 필드 사용 설명
 
 zlib_how.html
-    painfully comprehensive description of zpipe.c (see below)
-    - describes in excruciating detail the use of deflate() and inflate()
+    zpipe.c(아래 참조)에 대한 매우 포괄적인 설명
+    - deflate() 및 inflate() 사용을 매우 자세하게 설명
 
 zpipe.c
-    reads and writes zlib streams from stdin to stdout
-    - illustrates the proper use of deflate() and inflate()
-    - deeply commented in zlib_how.html (see above)
+    stdin에서 stdout으로 zlib 스트림 읽기 및 쓰기
+    - deflate() 및 inflate()의 올바른 사용 설명
+    - zlib_how.html(위 참조)에 자세히 주석 처리됨
 
 zran.c
-    index a zlib or gzip stream and randomly access it
-    - illustrates the use of Z_BLOCK, inflatePrime(), and
-      inflateSetDictionary() to provide random access
+    zlib 또는 gzip 스트림을 인덱싱하고 무작위로 액세스
+    - 무작위 액세스를 제공하기 위한 Z_BLOCK, inflatePrime() 및 inflateSetDictionary() 사용 설명

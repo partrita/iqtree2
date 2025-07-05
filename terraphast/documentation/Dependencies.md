@@ -1,21 +1,19 @@
-
-Dependencies
+의존성
 ============
 
-This library has multiple Dependencies
+이 라이브러리에는 여러 의존성이 있습니다.
 
 
-Detailed List
+세부 목록
 -------------
 
-* [Catch](https://github.com/philsquared/Catch). The header `catch.hpp` is supposed to be in the default include-path. The framework is avaiable multiple distros under the name `catch`.
+* [Catch](https://github.com/philsquared/Catch). 헤더 `catch.hpp`는 기본 포함 경로에 있어야 합니다. 이 프레임워크는 `catch`라는 이름으로 여러 배포판에서 사용할 수 있습니다.
 * ...
 
-Copyable List for installation
+설치를 위한 복사 가능한 목록
 ------------------------------
 
 
 ```
 catch
 ```
-

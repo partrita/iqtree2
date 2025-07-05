@@ -1,368 +1,219 @@
-
-                Frequently Asked Questions about zlib
-
-
-If your question is not there, please check the zlib home page
-http://zlib.net/ which may have more recent information.
-The lastest zlib FAQ is at http://zlib.net/zlib_faq.html
+zlib에 대해 자주 묻는 질문
 
 
- 1. Is zlib Y2K-compliant?
+귀하의 질문이 없다면, 최신 정보가 있을 수 있는 zlib 홈페이지 http://zlib.net/를 확인하십시오.
+최신 zlib FAQ는 http://zlib.net/zlib_faq.html에 있습니다.
 
-    Yes. zlib doesn't handle dates.
 
- 2. Where can I get a Windows DLL version?
+ 1. zlib는 Y2K와 호환됩니까?
 
-    The zlib sources can be compiled without change to produce a DLL.  See the
-    file win32/DLL_FAQ.txt in the zlib distribution.  Pointers to the
-    precompiled DLL are found in the zlib web site at http://zlib.net/ .
+    예. zlib는 날짜를 처리하지 않습니다.
 
- 3. Where can I get a Visual Basic interface to zlib?
+ 2. Windows DLL 버전은 어디서 구할 수 있습니까?
 
-    See
+    zlib 소스는 변경 없이 컴파일하여 DLL을 생성할 수 있습니다. zlib 배포판의 win32/DLL_FAQ.txt 파일을 참조하십시오. 미리 컴파일된 DLL에 대한 포인터는 zlib 웹 사이트 http://zlib.net/에서 찾을 수 있습니다.
+
+ 3. zlib용 Visual Basic 인터페이스는 어디서 구할 수 있습니까?
+
+    다음을 참조하십시오.
         * http://marknelson.us/1997/01/01/zlib-engine/
-        * win32/DLL_FAQ.txt in the zlib distribution
+        * zlib 배포판의 win32/DLL_FAQ.txt
 
- 4. compress() returns Z_BUF_ERROR.
+ 4. compress()가 Z_BUF_ERROR를 반환합니다.
 
-    Make sure that before the call of compress(), the length of the compressed
-    buffer is equal to the available size of the compressed buffer and not
-    zero.  For Visual Basic, check that this parameter is passed by reference
-    ("as any"), not by value ("as long").
+    compress()를 호출하기 전에 압축된 버퍼의 길이가 압축된 버퍼의 사용 가능한 크기와 같고 0이 아닌지 확인하십시오. Visual Basic의 경우 이 매개변수가 값("as long")이 아닌 참조("as any")로 전달되는지 확인하십시오.
 
- 5. deflate() or inflate() returns Z_BUF_ERROR.
+ 5. deflate() 또는 inflate()가 Z_BUF_ERROR를 반환합니다.
 
-    Before making the call, make sure that avail_in and avail_out are not zero.
-    When setting the parameter flush equal to Z_FINISH, also make sure that
-    avail_out is big enough to allow processing all pending input.  Note that a
-    Z_BUF_ERROR is not fatal--another call to deflate() or inflate() can be
-    made with more input or output space.  A Z_BUF_ERROR may in fact be
-    unavoidable depending on how the functions are used, since it is not
-    possible to tell whether or not there is more output pending when
-    strm.avail_out returns with zero.  See http://zlib.net/zlib_how.html for a
-    heavily annotated example.
+    호출하기 전에 avail_in 및 avail_out이 0이 아닌지 확인하십시오. 매개변수 flush를 Z_FINISH로 설정할 때 avail_out이 보류 중인 모든 입력을 처리할 수 있을 만큼 충분히 큰지 확인하십시오. Z_BUF_ERROR는 치명적이지 않으며, 더 많은 입력 또는 출력 공간으로 deflate() 또는 inflate()를 다시 호출할 수 있습니다. strm.avail_out이 0으로 반환될 때 보류 중인 출력이 더 있는지 여부를 알 수 없으므로 함수 사용 방식에 따라 Z_BUF_ERROR가 실제로 불가피할 수 있습니다. 자세한 주석이 달린 예제는 http://zlib.net/zlib_how.html을 참조하십시오.
 
- 6. Where's the zlib documentation (man pages, etc.)?
+ 6. zlib 설명서(man 페이지 등)는 어디에 있습니까?
 
-    It's in zlib.h .  Examples of zlib usage are in the files test/example.c
-    and test/minigzip.c, with more in examples/ .
+    zlib.h에 있습니다. zlib 사용 예제는 test/example.c 및 test/minigzip.c 파일에 있으며, examples/ 디렉토리에 더 많은 예제가 있습니다.
 
- 7. Why don't you use GNU autoconf or libtool or ...?
+ 7. GNU autoconf나 libtool 등을 사용하지 않는 이유는 무엇입니까?
 
-    Because we would like to keep zlib as a very small and simple package.
-    zlib is rather portable and doesn't need much configuration.
+    zlib를 매우 작고 간단한 패키지로 유지하고 싶기 때문입니다. zlib는 상당히 이식성이 뛰어나며 많은 구성이 필요하지 않습니다.
 
- 8. I found a bug in zlib.
+ 8. zlib에서 버그를 발견했습니다.
 
-    Most of the time, such problems are due to an incorrect usage of zlib.
-    Please try to reproduce the problem with a small program and send the
-    corresponding source to us at zlib@gzip.org .  Do not send multi-megabyte
-    data files without prior agreement.
+    대부분의 경우 이러한 문제는 zlib의 잘못된 사용으로 인해 발생합니다. 작은 프로그램으로 문제를 재현하고 해당 소스를 zlib@gzip.org로 보내주십시오. 사전 동의 없이 수 메가바이트의 데이터 파일을 보내지 마십시오.
 
- 9. Why do I get "undefined reference to gzputc"?
+ 9. "undefined reference to gzputc"라는 메시지가 나타나는 이유는 무엇입니까?
 
-    If "make test" produces something like
+    "make test"가 다음과 같은 결과를 생성하는 경우
 
        example.o(.text+0x154): undefined reference to `gzputc'
 
-    check that you don't have old files libz.* in /usr/lib, /usr/local/lib or
-    /usr/X11R6/lib. Remove any old versions, then do "make install".
+    /usr/lib, /usr/local/lib 또는 /usr/X11R6/lib에 이전 libz.* 파일이 없는지 확인하십시오. 이전 버전을 제거한 다음 "make install"을 실행하십시오.
 
-10. I need a Delphi interface to zlib.
+10. zlib용 Delphi 인터페이스가 필요합니다.
 
-    See the contrib/delphi directory in the zlib distribution.
+    zlib 배포판의 contrib/delphi 디렉토리를 참조하십시오.
 
-11. Can zlib handle .zip archives?
+11. zlib가 .zip 아카이브를 처리할 수 있습니까?
 
-    Not by itself, no.  See the directory contrib/minizip in the zlib
-    distribution.
+    자체적으로는 처리할 수 없습니다. zlib 배포판의 contrib/minizip 디렉토리를 참조하십시오.
 
-12. Can zlib handle .Z files?
+12. zlib가 .Z 파일을 처리할 수 있습니까?
 
-    No, sorry.  You have to spawn an uncompress or gunzip subprocess, or adapt
-    the code of uncompress on your own.
+    아니요, 죄송합니다. uncompress 또는 gunzip 하위 프로세스를 생성하거나 직접 uncompress 코드를 수정해야 합니다.
 
-13. How can I make a Unix shared library?
+13. Unix 공유 라이브러리는 어떻게 만듭니까?
 
-    By default a shared (and a static) library is built for Unix.  So:
+    기본적으로 Unix용 공유 (및 정적) 라이브러리가 빌드됩니다. 따라서:
 
     make distclean
     ./configure
     make
 
-14. How do I install a shared zlib library on Unix?
+14. Unix에 공유 zlib 라이브러리를 어떻게 설치합니까?
 
-    After the above, then:
+    위의 작업을 수행한 후 다음을 실행합니다.
 
     make install
 
-    However, many flavors of Unix come with a shared zlib already installed.
-    Before going to the trouble of compiling a shared version of zlib and
-    trying to install it, you may want to check if it's already there!  If you
-    can #include <zlib.h>, it's there.  The -lz option will probably link to
-    it.  You can check the version at the top of zlib.h or with the
-    ZLIB_VERSION symbol defined in zlib.h .
+    그러나 많은 Unix 계열에는 이미 공유 zlib가 설치되어 있습니다. 공유 버전의 zlib를 컴파일하고 설치하려고 하기 전에 이미 설치되어 있는지 확인하는 것이 좋습니다! #include <zlib.h>를 사용할 수 있다면 설치되어 있는 것입니다. -lz 옵션은 아마도 해당 라이브러리에 링크될 것입니다. zlib.h 상단이나 zlib.h에 정의된 ZLIB_VERSION 기호로 버전을 확인할 수 있습니다.
 
-15. I have a question about OttoPDF.
+15. OttoPDF에 대한 질문이 있습니다.
 
-    We are not the authors of OttoPDF. The real author is on the OttoPDF web
-    site: Joel Hainley, jhainley@myndkryme.com.
+    저희는 OttoPDF의 저자가 아닙니다. 실제 저자는 OttoPDF 웹 사이트에 있습니다: Joel Hainley, jhainley@myndkryme.com.
 
-16. Can zlib decode Flate data in an Adobe PDF file?
+16. zlib가 Adobe PDF 파일의 Flate 데이터를 디코딩할 수 있습니까?
 
-    Yes. See http://www.pdflib.com/ . To modify PDF forms, see
-    http://sourceforge.net/projects/acroformtool/ .
+    예. http://www.pdflib.com/을 참조하십시오. PDF 양식을 수정하려면 http://sourceforge.net/projects/acroformtool/을 참조하십시오.
 
-17. Why am I getting this "register_frame_info not found" error on Solaris?
+17. Solaris에서 "register_frame_info not found" 오류가 나타나는 이유는 무엇입니까?
 
-    After installing zlib 1.1.4 on Solaris 2.6, running applications using zlib
-    generates an error such as:
+    Solaris 2.6에 zlib 1.1.4를 설치한 후 zlib를 사용하는 응용 프로그램을 실행하면 다음과 같은 오류가 발생합니다.
 
         ld.so.1: rpm: fatal: relocation error: file /usr/local/lib/libz.so:
         symbol __register_frame_info: referenced symbol not found
 
-    The symbol __register_frame_info is not part of zlib, it is generated by
-    the C compiler (cc or gcc).  You must recompile applications using zlib
-    which have this problem.  This problem is specific to Solaris.  See
-    http://www.sunfreeware.com for Solaris versions of zlib and applications
-    using zlib.
+    기호 __register_frame_info는 zlib의 일부가 아니며 C 컴파일러(cc 또는 gcc)에 의해 생성됩니다. 이 문제가 있는 zlib를 사용하는 응용 프로그램을 다시 컴파일해야 합니다. 이 문제는 Solaris에만 해당됩니다. zlib 및 zlib를 사용하는 응용 프로그램의 Solaris 버전은 http://www.sunfreeware.com을 참조하십시오.
 
-18. Why does gzip give an error on a file I make with compress/deflate?
+18. compress/deflate로 만든 파일에서 gzip이 오류를 발생시키는 이유는 무엇입니까?
 
-    The compress and deflate functions produce data in the zlib format, which
-    is different and incompatible with the gzip format.  The gz* functions in
-    zlib on the other hand use the gzip format.  Both the zlib and gzip formats
-    use the same compressed data format internally, but have different headers
-    and trailers around the compressed data.
+    compress 및 deflate 함수는 zlib 형식의 데이터를 생성하며, 이는 gzip 형식과 다르고 호환되지 않습니다. 반면에 zlib의 gz* 함수는 gzip 형식을 사용합니다. zlib 및 gzip 형식 모두 내부적으로 동일한 압축 데이터 형식을 사용하지만 압축된 데이터 주위에 다른 헤더와 트레일러가 있습니다.
 
-19. Ok, so why are there two different formats?
+19. 그렇다면 왜 두 가지 다른 형식이 있습니까?
 
-    The gzip format was designed to retain the directory information about a
-    single file, such as the name and last modification date.  The zlib format
-    on the other hand was designed for in-memory and communication channel
-    applications, and has a much more compact header and trailer and uses a
-    faster integrity check than gzip.
+    gzip 형식은 이름 및 마지막 수정 날짜와 같은 단일 파일에 대한 디렉토리 정보를 유지하도록 설계되었습니다. 반면에 zlib 형식은 메모리 내 및 통신 채널 응용 프로그램을 위해 설계되었으며 훨씬 더 간결한 헤더와 트레일러를 사용하고 gzip보다 빠른 무결성 검사를 사용합니다.
 
-20. Well that's nice, but how do I make a gzip file in memory?
+20. 좋습니다. 하지만 메모리에서 gzip 파일을 어떻게 만듭니까?
 
-    You can request that deflate write the gzip format instead of the zlib
-    format using deflateInit2().  You can also request that inflate decode the
-    gzip format using inflateInit2().  Read zlib.h for more details.
+    deflateInit2()를 사용하여 deflate가 zlib 형식 대신 gzip 형식을 작성하도록 요청할 수 있습니다. 또한 inflateInit2()를 사용하여 inflate가 gzip 형식을 디코딩하도록 요청할 수 있습니다. 자세한 내용은 zlib.h를 읽어보십시오.
 
-21. Is zlib thread-safe?
+21. zlib는 스레드로부터 안전합니까?
 
-    Yes.  However any library routines that zlib uses and any application-
-    provided memory allocation routines must also be thread-safe.  zlib's gz*
-    functions use stdio library routines, and most of zlib's functions use the
-    library memory allocation routines by default.  zlib's *Init* functions
-    allow for the application to provide custom memory allocation routines.
+    예. 그러나 zlib가 사용하는 모든 라이브러리 루틴과 응용 프로그램에서 제공하는 모든 메모리 할당 루틴도 스레드로부터 안전해야 합니다. zlib의 gz* 함수는 stdio 라이브러리 루틴을 사용하며, 대부분의 zlib 함수는 기본적으로 라이브러리 메모리 할당 루틴을 사용합니다. zlib의 *Init* 함수를 사용하면 응용 프로그램에서 사용자 지정 메모리 할당 루틴을 제공할 수 있습니다.
 
-    Of course, you should only operate on any given zlib or gzip stream from a
-    single thread at a time.
+    물론 특정 zlib 또는 gzip 스트림은 한 번에 단일 스레드에서만 작동해야 합니다.
 
-22. Can I use zlib in my commercial application?
+22. 상용 응용 프로그램에서 zlib를 사용할 수 있습니까?
 
-    Yes.  Please read the license in zlib.h.
+    예. zlib.h의 라이선스를 읽어보십시오.
 
-23. Is zlib under the GNU license?
+23. zlib는 GNU 라이선스 하에 있습니까?
 
-    No.  Please read the license in zlib.h.
+    아니요. zlib.h의 라이선스를 읽어보십시오.
 
-24. The license says that altered source versions must be "plainly marked". So
-    what exactly do I need to do to meet that requirement?
+24. 라이선스에는 변경된 소스 버전은 "명확하게 표시"되어야 한다고 명시되어 있습니다. 그렇다면 해당 요구 사항을 충족하려면 정확히 무엇을 해야 합니까?
 
-    You need to change the ZLIB_VERSION and ZLIB_VERNUM #defines in zlib.h.  In
-    particular, the final version number needs to be changed to "f", and an
-    identification string should be appended to ZLIB_VERSION.  Version numbers
-    x.x.x.f are reserved for modifications to zlib by others than the zlib
-    maintainers.  For example, if the version of the base zlib you are altering
-    is "1.2.3.4", then in zlib.h you should change ZLIB_VERNUM to 0x123f, and
-    ZLIB_VERSION to something like "1.2.3.f-zachary-mods-v3".  You can also
-    update the version strings in deflate.c and inftrees.c.
+    zlib.h의 ZLIB_VERSION 및 ZLIB_VERNUM #define을 변경해야 합니다. 특히 최종 버전 번호는 "f"로 변경해야 하며 ZLIB_VERSION에 식별 문자열을 추가해야 합니다. 버전 번호 x.x.x.f는 zlib 유지 관리자가 아닌 다른 사람이 zlib를 수정한 경우에 사용됩니다. 예를 들어 변경하는 기본 zlib의 버전이 "1.2.3.4"인 경우 zlib.h에서 ZLIB_VERNUM을 0x123f로 변경하고 ZLIB_VERSION을 "1.2.3.f-zachary-mods-v3"과 같이 변경해야 합니다. deflate.c 및 inftrees.c의 버전 문자열도 업데이트할 수 있습니다.
 
-    For altered source distributions, you should also note the origin and
-    nature of the changes in zlib.h, as well as in ChangeLog and README, along
-    with the dates of the alterations.  The origin should include at least your
-    name (or your company's name), and an email address to contact for help or
-    issues with the library.
+    변경된 소스 배포의 경우 변경 날짜와 함께 zlib.h, ChangeLog 및 README에 변경 사항의 출처와 특성을 기록해야 합니다. 출처에는 최소한 귀하의 이름(또는 회사 이름)과 라이브러리 관련 도움이나 문제에 대한 문의 이메일 주소가 포함되어야 합니다.
 
-    Note that distributing a compiled zlib library along with zlib.h and
-    zconf.h is also a source distribution, and so you should change
-    ZLIB_VERSION and ZLIB_VERNUM and note the origin and nature of the changes
-    in zlib.h as you would for a full source distribution.
+    컴파일된 zlib 라이브러리를 zlib.h 및 zconf.h와 함께 배포하는 것도 소스 배포이므로 전체 소스 배포와 마찬가지로 ZLIB_VERSION 및 ZLIB_VERNUM을 변경하고 zlib.h에 변경 사항의 출처와 특성을 기록해야 합니다.
 
-25. Will zlib work on a big-endian or little-endian architecture, and can I
-    exchange compressed data between them?
+25. zlib는 빅 엔디안 또는 리틀 엔디안 아키텍처에서 작동합니까? 그리고 그들 사이에서 압축된 데이터를 교환할 수 있습니까?
 
-    Yes and yes.
+    예, 그리고 예.
 
-26. Will zlib work on a 64-bit machine?
+26. zlib는 64비트 시스템에서 작동합니까?
 
-    Yes.  It has been tested on 64-bit machines, and has no dependence on any
-    data types being limited to 32-bits in length.  If you have any
-    difficulties, please provide a complete problem report to zlib@gzip.org
+    예. 64비트 시스템에서 테스트되었으며 데이터 형식이 32비트로 제한되는 것에 의존하지 않습니다. 어려움이 있으면 zlib@gzip.org로 전체 문제 보고서를 제공하십시오.
 
-27. Will zlib decompress data from the PKWare Data Compression Library?
+27. zlib가 PKWare 데이터 압축 라이브러리의 데이터를 압축 해제할 수 있습니까?
 
-    No.  The PKWare DCL uses a completely different compressed data format than
-    does PKZIP and zlib.  However, you can look in zlib's contrib/blast
-    directory for a possible solution to your problem.
+    아니요. PKWare DCL은 PKZIP 및 zlib와 완전히 다른 압축 데이터 형식을 사용합니다. 그러나 문제에 대한 가능한 해결책은 zlib의 contrib/blast 디렉토리를 참조하십시오.
 
-28. Can I access data randomly in a compressed stream?
+28. 압축된 스트림에서 데이터에 무작위로 액세스할 수 있습니까?
 
-    No, not without some preparation.  If when compressing you periodically use
-    Z_FULL_FLUSH, carefully write all the pending data at those points, and
-    keep an index of those locations, then you can start decompression at those
-    points.  You have to be careful to not use Z_FULL_FLUSH too often, since it
-    can significantly degrade compression.  Alternatively, you can scan a
-    deflate stream once to generate an index, and then use that index for
-    random access.  See examples/zran.c .
+    아니요, 약간의 준비 없이는 불가능합니다. 압축할 때 주기적으로 Z_FULL_FLUSH를 사용하고 해당 지점에서 보류 중인 모든 데이터를 신중하게 쓰고 해당 위치의 인덱스를 유지하면 해당 지점에서 압축 해제를 시작할 수 있습니다. Z_FULL_FLUSH를 너무 자주 사용하면 압축률이 크게 저하될 수 있으므로 주의해야 합니다. 또는 deflate 스트림을 한 번 스캔하여 인덱스를 생성한 다음 해당 인덱스를 사용하여 무작위 액세스할 수 있습니다. examples/zran.c를 참조하십시오.
 
-29. Does zlib work on MVS, OS/390, CICS, etc.?
+29. zlib는 MVS, OS/390, CICS 등에서 작동합니까?
 
-    It has in the past, but we have not heard of any recent evidence.  There
-    were working ports of zlib 1.1.4 to MVS, but those links no longer work.
-    If you know of recent, successful applications of zlib on these operating
-    systems, please let us know.  Thanks.
+    과거에는 작동했지만 최근 증거는 듣지 못했습니다. MVS용 zlib 1.1.4의 작동 포트가 있었지만 해당 링크는 더 이상 작동하지 않습니다. 이러한 운영 체제에서 zlib를 최근 성공적으로 적용한 사례를 알고 있다면 알려주십시오. 감사합니다.
 
-30. Is there some simpler, easier to read version of inflate I can look at to
-    understand the deflate format?
+30. deflate 형식을 이해하기 위해 살펴볼 수 있는 더 간단하고 읽기 쉬운 inflate 버전이 있습니까?
 
-    First off, you should read RFC 1951.  Second, yes.  Look in zlib's
-    contrib/puff directory.
+    먼저 RFC 1951을 읽어야 합니다. 둘째, 예. zlib의 contrib/puff 디렉토리를 참조하십시오.
 
-31. Does zlib infringe on any patents?
+31. zlib가 특허를 침해합니까?
 
-    As far as we know, no.  In fact, that was originally the whole point behind
-    zlib.  Look here for some more information:
+    저희가 아는 한, 아니요. 사실, 그것이 원래 zlib의 전부였습니다. 자세한 내용은 다음을 참조하십시오.
 
     http://www.gzip.org/#faq11
 
-32. Can zlib work with greater than 4 GB of data?
+32. zlib가 4GB보다 큰 데이터를 처리할 수 있습니까?
 
-    Yes.  inflate() and deflate() will process any amount of data correctly.
-    Each call of inflate() or deflate() is limited to input and output chunks
-    of the maximum value that can be stored in the compiler's "unsigned int"
-    type, but there is no limit to the number of chunks.  Note however that the
-    strm.total_in and strm_total_out counters may be limited to 4 GB.  These
-    counters are provided as a convenience and are not used internally by
-    inflate() or deflate().  The application can easily set up its own counters
-    updated after each call of inflate() or deflate() to count beyond 4 GB.
-    compress() and uncompress() may be limited to 4 GB, since they operate in a
-    single call.  gzseek() and gztell() may be limited to 4 GB depending on how
-    zlib is compiled.  See the zlibCompileFlags() function in zlib.h.
+    예. inflate() 및 deflate()는 모든 양의 데이터를 올바르게 처리합니다. 각 inflate() 또는 deflate() 호출은 컴파일러의 "unsigned int" 유형에 저장할 수 있는 최대값의 입력 및 출력 청크로 제한되지만 청크 수에는 제한이 없습니다. 그러나 strm.total_in 및 strm_total_out 카운터는 4GB로 제한될 수 있습니다. 이러한 카운터는 편의를 위해 제공되며 inflate() 또는 deflate()에서 내부적으로 사용되지 않습니다. 응용 프로그램은 각 inflate() 또는 deflate() 호출 후 업데이트되는 자체 카운터를 쉽게 설정하여 4GB를 초과하여 계산할 수 있습니다. compress() 및 uncompress()는 단일 호출로 작동하므로 4GB로 제한될 수 있습니다. gzseek() 및 gztell()은 zlib 컴파일 방식에 따라 4GB로 제한될 수 있습니다. zlib.h의 zlibCompileFlags() 함수를 참조하십시오.
 
-    The word "may" appears several times above since there is a 4 GB limit only
-    if the compiler's "long" type is 32 bits.  If the compiler's "long" type is
-    64 bits, then the limit is 16 exabytes.
+    컴파일러의 "long" 유형이 32비트인 경우에만 4GB 제한이 있으므로 위에서 "may"라는 단어가 여러 번 나타납니다. 컴파일러의 "long" 유형이 64비트이면 제한은 16엑사바이트입니다.
 
-33. Does zlib have any security vulnerabilities?
+33. zlib에 보안 취약점이 있습니까?
 
-    The only one that we are aware of is potentially in gzprintf().  If zlib is
-    compiled to use sprintf() or vsprintf(), then there is no protection
-    against a buffer overflow of an 8K string space (or other value as set by
-    gzbuffer()), other than the caller of gzprintf() assuring that the output
-    will not exceed 8K.  On the other hand, if zlib is compiled to use
-    snprintf() or vsnprintf(), which should normally be the case, then there is
-    no vulnerability.  The ./configure script will display warnings if an
-    insecure variation of sprintf() will be used by gzprintf().  Also the
-    zlibCompileFlags() function will return information on what variant of
-    sprintf() is used by gzprintf().
+    저희가 아는 유일한 취약점은 잠재적으로 gzprintf()에 있습니다. zlib가 sprintf() 또는 vsprintf()를 사용하도록 컴파일된 경우 gzprintf() 호출자가 출력이 8K를 초과하지 않도록 보장하는 것 외에는 8K 문자열 공간(또는 gzbuffer()에서 설정한 다른 값)의 버퍼 오버플로에 대한 보호가 없습니다. 반면에 zlib가 일반적으로 그래야 하는 snprintf() 또는 vsnprintf()를 사용하도록 컴파일된 경우 취약점이 없습니다. ./configure 스크립트는 gzprintf()에서 안전하지 않은 sprintf() 변형이 사용될 경우 경고를 표시합니다. 또한 zlibCompileFlags() 함수는 gzprintf()에서 사용하는 sprintf() 변형에 대한 정보를 반환합니다.
 
-    If you don't have snprintf() or vsnprintf() and would like one, you can
-    find a portable implementation here:
+    snprintf() 또는 vsnprintf()가 없고 하나를 원한다면 다음에서 이식 가능한 구현을 찾을 수 있습니다.
 
         http://www.ijs.si/software/snprintf/
 
-    Note that you should be using the most recent version of zlib.  Versions
-    1.1.3 and before were subject to a double-free vulnerability, and versions
-    1.2.1 and 1.2.2 were subject to an access exception when decompressing
-    invalid compressed data.
+    최신 버전의 zlib를 사용해야 합니다. 버전 1.1.3 이전 버전은 이중 해제 취약점에 취약했으며 버전 1.2.1 및 1.2.2는 잘못된 압축 데이터를 압축 해제할 때 액세스 예외에 취약했습니다.
 
-34. Is there a Java version of zlib?
+34. zlib의 Java 버전이 있습니까?
 
-    Probably what you want is to use zlib in Java. zlib is already included
-    as part of the Java SDK in the java.util.zip package. If you really want
-    a version of zlib written in the Java language, look on the zlib home
-    page for links: http://zlib.net/ .
+    아마도 Java에서 zlib를 사용하고 싶을 것입니다. zlib는 이미 java.util.zip 패키지의 Java SDK의 일부로 포함되어 있습니다. Java 언어로 작성된 zlib 버전을 정말로 원한다면 zlib 홈페이지에서 링크를 찾아보십시오: http://zlib.net/ .
 
-35. I get this or that compiler or source-code scanner warning when I crank it
-    up to maximally-pedantic. Can't you guys write proper code?
+35. 최대한 꼼꼼하게 컴파일러나 소스 코드 스캐너 경고를 올렸을 때 이런저런 경고가 나타납니다. 제대로 된 코드를 작성할 수 없습니까?
 
-    Many years ago, we gave up attempting to avoid warnings on every compiler
-    in the universe.  It just got to be a waste of time, and some compilers
-    were downright silly as well as contradicted each other.  So now, we simply
-    make sure that the code always works.
+    몇 년 전에 저희는 우주의 모든 컴파일러에서 경고를 피하려는 시도를 포기했습니다. 시간 낭비였고 일부 컴파일러는 완전히 어리석었을 뿐만 아니라 서로 모순되었습니다. 그래서 이제 저희는 코드가 항상 작동하도록 합니다.
 
-36. Valgrind (or some similar memory access checker) says that deflate is
-    performing a conditional jump that depends on an uninitialized value.
-    Isn't that a bug?
+36. Valgrind(또는 유사한 메모리 액세스 검사기)는 deflate가 초기화되지 않은 값에 의존하는 조건부 점프를 수행한다고 말합니다. 버그가 아닙니까?
 
-    No.  That is intentional for performance reasons, and the output of deflate
-    is not affected.  This only started showing up recently since zlib 1.2.x
-    uses malloc() by default for allocations, whereas earlier versions used
-    calloc(), which zeros out the allocated memory.  Even though the code was
-    correct, versions 1.2.4 and later was changed to not stimulate these
-    checkers.
+    아니요. 성능상의 이유로 의도적인 것이며 deflate의 출력에는 영향을 미치지 않습니다. 이는 zlib 1.2.x가 기본적으로 할당에 malloc()을 사용하는 반면 이전 버전은 할당된 메모리를 0으로 채우는 calloc()을 사용했기 때문에 최근에야 나타나기 시작했습니다. 코드가 정확했지만 버전 1.2.4 이상은 이러한 검사기를 자극하지 않도록 변경되었습니다.
 
-37. Will zlib read the (insert any ancient or arcane format here) compressed
-    data format?
+37. zlib가 (여기에 고대 또는 난해한 형식 삽입) 압축 데이터 형식을 읽을 수 있습니까?
 
-    Probably not. Look in the comp.compression FAQ for pointers to various
-    formats and associated software.
+    아마도 아닐 것입니다. 다양한 형식 및 관련 소프트웨어에 대한 포인터는 comp.compression FAQ를 참조하십시오.
 
-38. How can I encrypt/decrypt zip files with zlib?
+38. zlib로 zip 파일을 암호화/복호화하려면 어떻게 해야 합니까?
 
-    zlib doesn't support encryption.  The original PKZIP encryption is very
-    weak and can be broken with freely available programs.  To get strong
-    encryption, use GnuPG, http://www.gnupg.org/ , which already includes zlib
-    compression.  For PKZIP compatible "encryption", look at
-    http://www.info-zip.org/
+    zlib는 암호화를 지원하지 않습니다. 원래 PKZIP 암호화는 매우 약하며 무료로 제공되는 프로그램으로 해독할 수 있습니다. 강력한 암호화를 얻으려면 이미 zlib 압축을 포함하는 GnuPG, http://www.gnupg.org/를 사용하십시오. PKZIP 호환 "암호화"의 경우 http://www.info-zip.org/를 참조하십시오.
 
-39. What's the difference between the "gzip" and "deflate" HTTP 1.1 encodings?
+39. "gzip"과 "deflate" HTTP 1.1 인코딩의 차이점은 무엇입니까?
 
-    "gzip" is the gzip format, and "deflate" is the zlib format.  They should
-    probably have called the second one "zlib" instead to avoid confusion with
-    the raw deflate compressed data format.  While the HTTP 1.1 RFC 2616
-    correctly points to the zlib specification in RFC 1950 for the "deflate"
-    transfer encoding, there have been reports of servers and browsers that
-    incorrectly produce or expect raw deflate data per the deflate
-    specification in RFC 1951, most notably Microsoft.  So even though the
-    "deflate" transfer encoding using the zlib format would be the more
-    efficient approach (and in fact exactly what the zlib format was designed
-    for), using the "gzip" transfer encoding is probably more reliable due to
-    an unfortunate choice of name on the part of the HTTP 1.1 authors.
+    "gzip"은 gzip 형식이고 "deflate"는 zlib 형식입니다. 원시 deflate 압축 데이터 형식과의 혼동을 피하기 위해 두 번째 형식을 "zlib"라고 불렀어야 합니다. HTTP 1.1 RFC 2616은 "deflate" 전송 인코딩에 대해 RFC 1950의 zlib 사양을 올바르게 가리키지만, RFC 1951의 deflate 사양에 따라 원시 deflate 데이터를 잘못 생성하거나 예상하는 서버 및 브라우저, 특히 Microsoft에 대한 보고가 있었습니다. 따라서 zlib 형식을 사용하는 "deflate" 전송 인코딩이 더 효율적인 접근 방식(실제로 zlib 형식이 설계된 목적)이겠지만, HTTP 1.1 작성자의 불행한 이름 선택으로 인해 "gzip" 전송 인코딩을 사용하는 것이 아마도 더 안정적일 것입니다.
 
-    Bottom line: use the gzip format for HTTP 1.1 encoding.
+    결론: HTTP 1.1 인코딩에는 gzip 형식을 사용하십시오.
 
-40. Does zlib support the new "Deflate64" format introduced by PKWare?
+40. zlib가 PKWare에서 도입한 새로운 "Deflate64" 형식을 지원합니까?
 
-    No.  PKWare has apparently decided to keep that format proprietary, since
-    they have not documented it as they have previous compression formats.  In
-    any case, the compression improvements are so modest compared to other more
-    modern approaches, that it's not worth the effort to implement.
+    아니요. PKWare는 이전 압축 형식과 마찬가지로 문서화하지 않았기 때문에 해당 형식을 독점적으로 유지하기로 결정한 것 같습니다. 어쨌든 압축 개선은 다른 최신 접근 방식에 비해 너무 미미하여 구현할 가치가 없습니다.
 
-41. I'm having a problem with the zip functions in zlib, can you help?
+41. zlib의 zip 함수에 문제가 있는데 도와주실 수 있습니까?
 
-    There are no zip functions in zlib.  You are probably using minizip by
-    Giles Vollant, which is found in the contrib directory of zlib.  It is not
-    part of zlib.  In fact none of the stuff in contrib is part of zlib.  The
-    files in there are not supported by the zlib authors.  You need to contact
-    the authors of the respective contribution for help.
+    zlib에는 zip 함수가 없습니다. 아마도 zlib의 contrib 디렉토리에 있는 Giles Vollant의 minizip을 사용하고 있을 것입니다. 이것은 zlib의 일부가 아닙니다. 사실 contrib의 어떤 것도 zlib의 일부가 아닙니다. 해당 파일은 zlib 작성자가 지원하지 않습니다. 도움을 받으려면 각 기여 작성자에게 문의해야 합니다.
 
-42. The match.asm code in contrib is under the GNU General Public License.
-    Since it's part of zlib, doesn't that mean that all of zlib falls under the
-    GNU GPL?
+42. contrib의 match.asm 코드는 GNU 일반 공중 사용 허가서 하에 있습니다. zlib의 일부이므로 모든 zlib가 GNU GPL 하에 있다는 의미가 아닙니까?
 
-    No.  The files in contrib are not part of zlib.  They were contributed by
-    other authors and are provided as a convenience to the user within the zlib
-    distribution.  Each item in contrib has its own license.
+    아니요. contrib의 파일은 zlib의 일부가 아닙니다. 다른 작성자가 기여했으며 zlib 배포판 내에서 사용자의 편의를 위해 제공됩니다. contrib의 각 항목에는 자체 라이선스가 있습니다.
 
-43. Is zlib subject to export controls?  What is its ECCN?
+43. zlib는 수출 통제 대상입니까? ECCN은 무엇입니까?
 
-    zlib is not subject to export controls, and so is classified as EAR99.
+    zlib는 수출 통제 대상이 아니므로 EAR99로 분류됩니다.
 
-44. Can you please sign these lengthy legal documents and fax them back to us
-    so that we can use your software in our product?
+44. 저희 제품에서 귀하의 소프트웨어를 사용할 수 있도록 이 장황한 법적 문서에 서명하고 팩스로 보내주시겠습니까?
 
-    No. Go away. Shoo.
+    아니요. 가십시오. 저리 가십시오.
